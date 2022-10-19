@@ -1,0 +1,80 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 700,
+  "height": 300,
+  "data": {
+    "url": "https://raw.githubusercontent.com/mleu0004/3179-testrepo/main/suicide.csv"
+  },
+  "transform": [
+    {"calculate": "year(datum.year)", "as": "year"},
+    {"filter": "datum.year == 2014"},
+    {
+      "filter": "datum.country == 'United States' || datum.country == 'United Kingdom' || datum.country == 'Canada' || datum.country == 'Germany' || datum.country == 'Netherlands' || datum.country == 'Ireland' || datum.country == 'Australia' || datum.country == 'France' || datum.country == 'India' || datum.country == 'New Zealand'"
+    },
+    {
+      "aggregate": [
+        {"op": "mean", "field": "suicidesPer100k", "as": "mean_suicides"}
+      ],
+      "groupby": ["country"]
+    },
+    {
+      "window": [{"op": "rank", "as": "rank"}],
+      "sort": [{"field": "mean_suicides", "order": "descending"}]
+    },
+    {"filter": "datum.rank <= 10"}
+  ],
+  "layer": [
+    {
+      "mark": "bar",
+      "encoding": {
+        "x": {"field": "mean_suicides", "type": "quantitative"},
+        "y": {
+          "field": "country",
+          "type": "nominal",
+          "sort": {"field": "mean_suicides", "order": "descending"},
+          "title": "Country"
+        },
+        "color": {
+          "field": "mean_suicides",
+          "scale": {"scheme": "tealblues"},
+          "legend": null
+        },
+        "tooltip": [
+          {"field": "country", "type": "nominal", "title": "Country"},
+          {"field": "mean_suicides", "type": "quantitative", "format": "r", "title": "Suicides Per 100k"}
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/mleu0004/3179-testrepo/main/suicide.csv"
+      },
+      "mark": {"type": "rule", "color": "black"},
+      "transform": [
+        {
+          "filter": "datum.country == 'United States' || datum.country == 'United Kingdom' || datum.country == 'Canada' || datum.country == 'Germany' || datum.country == 'Netherlands' || datum.country == 'Ireland' || datum.country == 'Australia' || datum.country == 'France' || datum.country == 'India' || datum.country == 'New Zealand'"
+        },
+        {
+          "joinaggregate": [
+            {
+              "op": "mean",
+              "field": "suicidesPer100k",
+              "as": "mean_tot_suicides"
+            }
+          ]
+        }
+      ],
+      "encoding": {
+        "x": {
+          "aggregate": "mean",
+          "field": "mean_tot_suicides",
+          "type": "quantitative",
+          "title":"Suicides Per 100k"
+        }
+      }
+    }
+  ],
+  "config": {
+    "background":"rgb(239,243,255)"
+  }
+}

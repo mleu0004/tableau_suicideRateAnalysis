@@ -1,0 +1,65 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 700,
+  "height": 300,
+  "layer": [
+    {
+      "data": {
+        "url": "testing_map.geo.json",
+        "format": {"type": "topojson", "feature": "testing.geo"}
+      },
+      "projection": {"type": "equirectangular"},
+      "mark": {"type": "geoshape", "fill": "lightgray", "stroke": "gray"}
+    },
+    {
+      "data": {
+        "url": "suicide.csv"
+      },
+      "transform": [
+        {
+          "lookup": "country",
+          "from": {
+            "data": {
+              "url": "testing_map.geo.json",
+              "format": {"type": "topojson", "feature": "testing.geo"}
+            },
+            "key": "properties.name"
+          },
+          "as": "geo"
+        },
+        {
+          "joinaggregate": [
+            {"op": "mean", "field": "suicidesPer100k", "as": "suicides100"}
+          ],
+          "groupby": ["country"]
+        }
+      ],
+      "projection": {"type": "equirectangular"},
+      "mark": {"type":"geoshape", "stroke":"black"},
+      "encoding": {
+        "shape": {"field": "geo", "type": "geojson"},
+        "color": {
+          "field": "suicides100",
+          "type": "quantitative",
+          "scale": {
+            "type": "threshold",
+            "domain": [5, 13, 20, 30, 35],
+            "range": ["#f1eef6", "#bdc9e1", "#74a9cf", "#2b8cbe", "#045a8d"]
+          },
+          "legend":{
+            "direction": "horizontal",
+            "orient": "top",
+            "title": "suicide rate"
+          }
+        },
+        "tooltip": [
+          {"field": "country", "type": "nominal"},
+          {"field": "suicides100", "type": "quantitative", "format": "r"}
+        ]
+      }
+    }
+  ],
+  "config": {
+    "background":"rgb(239,243,255)"
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 700,
+  "height": 300,
+  "data": {
+    "url": "suicide.csv"
+  },
+  "params": [
+    {
+      "name": "year_above",
+      "value": 1987,
+      "bind": {
+        "input": "range",
+        "min": 1987,
+        "max": 2016,
+        "step": 1,
+        "name": "Year : "
+      }
+    }
+  ],
+  "transform": [
+    {"calculate": "year(datum.year)", "as": "year"},
+    {"filter": "datum.year == null || datum.year == year_above"},
+    {
+      "aggregate": [
+        {"op": "mean", "field": "suicidesPer100k", "as": "mean_suicides"},
+        {"op": "median", "field": "year", "as": "median_year"}
+      ],
+      "groupby": ["country"]
+    },
+    {
+      "window": [{"op": "rank", "as": "rank"}],
+      "sort": [{"field": "mean_suicides", "order": "descending"}]
+    },
+    {"filter": "datum.rank <= 10"}
+  ],
+  "layer": [
+    {
+      "mark": "bar",
+      "encoding": {
+        "x": {"field": "mean_suicides", "type": "quantitative"},
+        "y": {
+          "field": "country",
+          "type": "nominal",
+          "sort": {"field": "mean_suicides", "order": "descending"},
+          "title": "Country"
+        },
+        "color": {
+          "field": "mean_suicides",
+          "scale": {"scheme": "blues"},
+          "legend": null
+        },
+        "tooltip": [
+          {"field": "country", "type": "nominal"},
+          {"field": "mean_suicides", "type": "quantitative", "format": "r"},
+          {"field": "median_year", "type": "quantitative"}
+        ]
+      }
+    },
+    {
+      "mark": {"type": "rule", "color": "black"},
+      "data": {
+        "url": "suicide.csv"
+      },
+      "transform": [
+        {"calculate": "year(datum.year)", "as": "year"},
+        {"filter": "datum.year == null || datum.year == year_above"},
+        {
+          "joinaggregate": [
+            {"op": "mean", "field": "suicidesPer100k", "as": "total_mean_sui"}
+          ]
+        }
+      ],
+      "encoding": {
+        "x": {
+          "aggregate": "mean",
+          "field": "total_mean_sui",
+          "type": "quantitative",
+          "title": "Suicides Per 100k"
+        }
+      }
+    }
+  ],
+  "config": {"background":"rgb(239,243,255)"}
+}

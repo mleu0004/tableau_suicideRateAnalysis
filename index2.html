@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Multiple Visualisations | An Example</title>
+  <!-- Import Vega & Vega-Lite (does not have to be from CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+
+  <!-- Import pure.css -->
+  <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css" integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ" crossorigin="anonymous">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Google font -->
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700;900&display=swap" rel="stylesheet">
+
+  <!-- CSS file -->
+  <link rel="stylesheet" type="text/css" href="styles.css" media="all">
+
+
+</head>
+
+<body>
+  
+  <div class="page">
+
+    <!-- pure grid group -->
+    <div class="pure-g">
+      <div class="pure-u-1-1">
+        <h1 style="text-align: center;">Suicide Victims from 1987 - 2016</h1>
+        <p>Throughout the years, there has been countless news and articles relating to suicide cases, 
+          people taking their own life due to pressure or certain mental issues. This page right here 
+          focuses on how suicide cases progresses over the years, giving us an insight on certain factors related to the suicide cases </p>
+      </div>
+    </div>
+    <!-- end pure grid group -->
+
+    <!-- pure grid group -->
+    <!--line suicides per 100k through years-->
+    <div class="pure-g">
+      <div class="pure-u-2-3">
+        <div id="vis1" class="vis-container"></div>
+      </div>
+      <div class="pure-u-1-3">
+        <p>The visualisation here is showing how does the number of suicides per 100k progresses over time, 
+          specifically from 1987 to 2016. <br><br>From the visualisation, you can see that the point where the 
+          suicide cases is at its peak is at the <b>year 1995</b>. Until the <b>year 2016</b>year 2016, the number of suicides cases per 100k 
+          is <b>reduced significantly</b> to just around the 2000s.</p>
+      </div>
+    </div>
+    <!-- end pure grid group -->
+
+    <!-- pure grid group -->
+    <!--line suicides per 100k through years, age group-->
+    <div class="pure-g">
+      <div class="pure-u-1-2">
+        <p>
+          The visualization on the left here is visualizing the suicidesPer100k for each age group. We see that the age group 
+          75+ years has the highest suicides count per 100k, compared to the other age groups. However, for age group 5-14, the 
+          suicide count per 100k is almost 0, showing that kids age 5-14 have little to no suicidal thoughts.<br><br>
+
+          Even with the above observations, the trend of suicides count per 100k for all these age group have a similar pattern, 
+          whereby their peak is at the year 1995, and decreases significantly at the year 2016.
+        </p>
+      </div>
+      <div class="pure-u-1-2">
+        <div id="vis2" class="vis-container"></div>
+      </div>
+    </div>
+    <!-- end pure grid group -->
+
+    <!-- pure grid group -->
+    <!-- map mean suicidesPer100k -->
+    <div class="pure-g">
+      <div class="pure-u-2-3">
+        <div id="vis3" class="vis-container"></div>
+      </div>
+      <div class="pure-u-1-3">
+        <p>
+          This map of the world is a choropleth map, where the saturation of colours indicates the number of suicide cases per 100k for each country.
+          The darker the color is, the higher the suicide rates in that country, and vice versa. Just glancing through the map, Russia seems to be most obvious country 
+          that has one of the highest suicide rates.<br><br>
+
+          Countries in grey are excluded from the threshold of colors, due to the countries not having sufficent data regarding their suicide cases.
+        </p>
+      </div>
+    </div>
+    <!-- end pure grid group -->
+
+    <!-- pure grid group -->
+    <!-- pie sex group proportion -->
+    <div class="pure-g">
+      <div class="pure-u-1-2">
+        <div id="vis5" class="vis-container"></div>
+        
+      </div>
+      <div class="pure-u-1-2">
+        <div id="vis4" class="vis-container" style="text-align: right;"></div>
+      </div>
+    </div>
+    <!-- end pure grid group -->
+
+    <!-- pure grid group -->
+    <!-- top 10 countries -->
+    <div class="pure-g">
+      <div class="pure-u-1-2">
+        <h1>Top 10 Countries with Highest Suicide Rates</h1>
+        <p>
+          This bar graph is showing the top 10 countries with the highest suicide rates. <b>By adjusting the slider below the graph, we can observe the top 10 countries 
+          for each year available</b>. Starting from 1995, Lithuania had been maintaining its position as one of the top 5 countries 
+          within the top 10 countries. <br><br>
+
+          The black line in the graph is showing the mean of suicide rates in the particular year. And for all the years except for 2016, all the top 10 countries exceeded the mean 
+          suicide rate in that year.
+        </p>
+      </div>
+      <div class="pure-u-1-3">
+        <p style="text-align: right;">
+            The pie chart here shows the proportion that each gender has occupied. <br><br>We can see that the male sex has significantly occupied 
+            the majority of the suicide cases with a stunning 76.89%, while the female sex occupied only 23.11%.  
+        </p>
+        
+      </div>
+    </div>
+    <!-- end pure grid group -->
+
+    <!-- pure grid group -->
+    <!--bar mental countries (left)-->
+    <!--bar suicide countries matching mental countries (right)-->
+    <div class="pure-g">
+      <div class="pure-u-1-2">
+        <div id="vis6" class="vis-container"></div>
+      </div>
+      <div class="pure-u-1-2">
+        <div id="vis7" class="vis-container"></div>
+      </div>
+    </div>
+    <!-- end pure grid group -->
+
+    <div class="pure-g">
+      <div class="pure-u-1-2">
+        <p>
+          The bar graph above is showing top 10 countries with the highest number of suicide victims in the year 2014. <br><br>We can see that United States significantly exceeded the other countries as they have around 750 victims 
+          in the year 2014 alone. While the United Kingdom is slightly below 200 victims, and the other countries are well below the average count of mental illness victims (the black line).
+        </p>
+      </div>
+      <div class="pure-u-1-2">
+        <p>
+          The above bar graph is showing the conutries that matches the countries in the graph on the right, while showing the suicide rate for those countries in 2014. The country 
+          Canada, India and New Zealand are not included in the bar graph, probably due to lack of data or unreported cases. <br><br>
+          Comparing the two graphs, it stands to reason that United States has a high suicide rate, given they are the Number 1 country in having the highest mental illness victims. However, even though 
+          France has the highest suicide rate out of the other countries, France only has 13 mental issues related victims in the year 2014. So, we can't say for sure that mental issues is the the main contribution towards suicide related cases.
+        </p>
+      </div>
+    </div>
+    
+
+
+  </div>
+  <script type="text/javascript">
+    var specVis1 = "./line_mean_suicideper100k.vl.json";
+    var specVis2 = "./line_age_suicide.vl.json";
+    var specVis3 = "./map_mean_suicidesPer100k.vl.json";
+    var specVis4 = "./pie_suicide_sex.vl.json"
+    var specVis5 = "./top10_countries.vl.json"
+    var specVis6 = "./bar_mental_countries.vl.json"
+    var specVis7 = "./bar_suicide_mental_countries.vl.json"
+  
+    vegaEmbed('#vis1', specVis1, {"actions": false}).then(function(result) {
+      // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+    }).catch(console.error);
+    
+     vegaEmbed('#vis2', specVis2, {"actions": false}).then(function(result) {
+      // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+    }).catch(console.error);
+  
+    vegaEmbed('#vis3', specVis3, {"actions": false}).then(function(result) {
+      // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+    }).catch(console.error);
+  
+    vegaEmbed('#vis4', specVis4, {"actions": false}).then(function(result) {
+      // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+    }).catch(console.error);
+
+    vegaEmbed('#vis5', specVis5, {"actions": false}).then(function(result) {
+      // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+    }).catch(console.error);
+
+    vegaEmbed('#vis6', specVis6, {"actions": false}).then(function(result) {
+      // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+    }).catch(console.error);
+
+    vegaEmbed('#vis7', specVis7, {"actions": false}).then(function(result) {
+      // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+    }).catch(console.error);
+  </script>
+  </body>
+  </html>

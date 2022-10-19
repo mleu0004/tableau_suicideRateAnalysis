@@ -1,0 +1,186 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {
+    "url": "survey.csv"
+  },
+  "hconcat": [
+    {
+      "width": 550,
+      "height": 300,
+      "transform": [
+        {
+          "aggregate": [
+            {"op": "count", "field": "Country", "as": "count_mental"}
+          ],
+          "groupby": ["Country"]
+        },
+        {
+          "window": [{"op": "rank", "as": "rank"}],
+          "sort": [{"field": "count_mental", "order": "descending"}]
+        },
+        {"filter": "datum.rank <= 10"},
+        {
+          "joinaggregate": [
+            {"op": "count", "field": "Country", "as": "cnt_country"},
+            {"op": "sum", "field": "count_mental", "as": "sum_count_mental"}
+          ]
+        },
+        {"calculate": "datum.sum_count_mental/datum.cnt_country", "as": "avg"}
+      ],
+      "layer": [
+        {
+          "params": [
+            {
+              "name": "highlight",
+              "select": {"type": "point", "on": "mouseover"}
+            },
+            {"name": "select", "select": "point"}
+          ],
+          "mark": {"type": "bar", "cursor": "pointer"},
+          "encoding": {
+            "x": {"field": "count_mental", "type": "quantitative"},
+            "y": {
+              "field": "Country",
+              "type": "nominal",
+              "sort": {"field": "count_mental", "order": "descending"}
+            },
+            "color": {
+              "field": "count_mental",
+              "scale": {"scheme": "oranges"},
+              "legend": null
+            },
+            "tooltip": [
+              {"field": "Country", "type": "nominal"},
+              {
+                "field": "count_mental",
+                "type": "quantitative",
+                "title": "Mental Victims"
+              }
+            ],
+            "fillOpacity": {
+              "condition": {"param": "select", "value": 1},
+              "value": 0.3
+            },
+            "strokeWidth": {
+              "condition": [
+                {"param": "select", "empty": false, "value": 2},
+                {"param": "highlight", "empty": false, "value": 1}
+              ],
+              "value": 0
+            }
+          }
+        },
+        {
+          "mark": {"type": "rule", "color": "black"},
+          "encoding": {
+            "x": {
+              "aggregate": "mean",
+              "field": "avg",
+              "type": "quantitative",
+              "title": "Mental Victims"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "data": {
+        "url": "suicide.csv"
+      },
+      "width": 550,
+      "height": 300,
+      "transform": [
+        {"calculate": "year(datum.year)", "as": "year"},
+        {"filter": "datum.year == 2014"},
+        {
+          "filter": "datum.country == 'United States' || datum.country == 'United Kingdom' || datum.country == 'Canada' || datum.country == 'Germany' || datum.country == 'Netherlands' || datum.country == 'Ireland' || datum.country == 'Australia' || datum.country == 'France' || datum.country == 'India' || datum.country == 'New Zealand'"
+        },
+        {
+          "aggregate": [
+            {"op": "mean", "field": "suicidesPer100k", "as": "mean_suicides"}
+          ],
+          "groupby": ["country"]
+        },
+        {
+          "window": [{"op": "rank", "as": "rank"}],
+          "sort": [{"field": "mean_suicides", "order": "descending"}]
+        },
+        {"filter": "datum.rank <= 10"}
+      ],
+      "layer": [
+        {
+          "params": [
+            {"name": "hover", "select": {"type": "point", "on": "mouseover"}},
+            {"name": "choose", "select": "point"}
+          ],
+          "mark": {"type": "bar", "cursor": "pointer"},
+          "encoding": {
+            "x": {"field": "mean_suicides", "type": "quantitative"},
+            "y": {
+              "field": "country",
+              "type": "nominal",
+              "sort": {"field": "mean_suicides", "order": "descending"},
+              "title": "Country"
+            },
+            "color": {
+              "field": "mean_suicides",
+              "scale": {"scheme": "oranges"},
+              "legend": null
+            },
+            "fillOpacity": {
+              "condition": {"param": "choose", "value": 1},
+              "value": 0.3
+            },
+            "strokeWidth": {
+              "condition": [
+                {"param": "choose", "empty": false, "value": 2},
+                {"param": "hover", "empty": false, "value": 1}
+              ],
+              "value": 0
+            },
+            "tooltip": [
+              {"field": "country", "type": "nominal", "title": "Country"},
+              {
+                "field": "mean_suicides",
+                "type": "quantitative",
+                "format": "r",
+                "title": "Suicides Per 100k"
+              }
+            ]
+          }
+        },
+        {
+          "data": {
+            "url": "https://raw.githubusercontent.com/mleu0004/3179-testrepo/main/suicide.csv"
+          },
+          "mark": {"type": "rule", "color": "black"},
+          "transform": [
+            {
+              "filter": "datum.country == 'United States' || datum.country == 'United Kingdom' || datum.country == 'Canada' || datum.country == 'Germany' || datum.country == 'Netherlands' || datum.country == 'Ireland' || datum.country == 'Australia' || datum.country == 'France' || datum.country == 'India' || datum.country == 'New Zealand'"
+            },
+            {
+              "joinaggregate": [
+                {
+                  "op": "mean",
+                  "field": "suicidesPer100k",
+                  "as": "mean_tot_suicides"
+                }
+              ]
+            }
+          ],
+          "encoding": {
+            "x": {
+              "aggregate": "mean",
+              "field": "mean_tot_suicides",
+              "type": "quantitative",
+              "title": "Suicide Rates"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "config": {
+    "background":"rgb(239,243,255)"
+  }
+}

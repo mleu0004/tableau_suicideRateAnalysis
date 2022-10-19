@@ -1,0 +1,64 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 800,
+  "height": 500,
+  "layer": [
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/mleu0004/3179-testrepo/main/testing_map.geo.json",
+        "format": {"type": "topojson", "feature": "testing.geo"}
+      },
+      "projection": {"type": "equirectangular"},
+      "mark": {"type": "geoshape", "fill": "lightgray", "stroke": "gray"}
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/mleu0004/3179-testrepo/main/survey.csv"
+      },
+      "transform": [
+        {
+          "lookup": "Country",
+          "from": {
+            "data": {
+              "url": "https://raw.githubusercontent.com/mleu0004/3179-testrepo/main/testing_map.geo.json",
+              "format": {"type": "topojson", "feature": "testing.geo"}
+            },
+            "key": "properties.name"
+          },
+          "as": "geo"
+        },
+        {
+          "joinaggregate": [
+            {"op": "count", "field": "Country", "as": "cnt_mental"}
+          ],
+          "groupby": ["Country"]
+        }
+      ],
+      "projection": {"type": "equirectangular"},
+      "mark": "geoshape",
+      "encoding": {
+        "shape": {"field": "geo", "type": "geojson"},
+        "color": {
+          "field": "cnt_mental",
+          "type": "quantitative",
+          "scale": {
+            "type": "threshold",
+            "domain": [5, 10, 100, 200, 300],
+            "range": ["#fee5d9", "#fcae91", "#fb6a4a", "#de2d26", "#a50f15"]
+          }
+        },
+        "tooltip": [
+          {"field": "Country", "type": "nominal"},
+          {
+            "field": "cnt_mental",
+            "type": "quantitative",
+            "title": "Mental Illness Victims"
+          }
+        ]
+      }
+    }
+  ],
+  "config": {
+    "background":"rgb(250, 197, 177)"
+  }
+}

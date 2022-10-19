@@ -1,0 +1,56 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 600,
+  "height": 300,
+  "data": {
+    "url": "https://raw.githubusercontent.com/mleu0004/3179-testrepo/main/suicide.csv"
+  },
+  "params": [
+    {
+      "name": "year_above",
+      "value": null,
+      "bind": {
+        "input": "range",
+        "min": 1987,
+        "max": 2016,
+        "step": 1,
+        "name": "Year : "
+      }
+    }
+  ],
+  "transform": [
+    {"calculate": "year(datum.year)", "as": "year"},
+    {"filter": "datum.year == year_above"},
+    {
+      "aggregate": [
+        {"op": "mean", "field": "suicidesPer100k", "as": "mean_suicides"}
+      ],
+      "groupby": ["country"]
+    },
+    {
+      "window": [{"op": "rank", "as": "rank"}],
+      "sort": [{"field": "mean_suicides", "order": "descending"}]
+    },
+    {"filter": "datum.rank <= 10"}
+  ],
+  "mark": "bar",
+  "encoding": {
+    "x": {"field": "mean_suicides", "type": "quantitative"},
+    "y": {
+      "field": "country",
+      "type": "nominal",
+      "sort": {"field": "mean_suicides", "order": "descending"}
+    },
+    "color": {
+      "field": "mean_suicides",
+      "scale": {"scheme": "reds"},
+      "legend": null
+    },
+    "tooltip": [
+      {"field": "country", "type": "nominal"},
+      {"field": "mean_suicides", "type": "quantitative"},
+      {"field": "year", "type": "temporal"}
+    ]
+  },
+  "config": {}
+}

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {
+    "url": "suicide.csv"
+  },
+  "width":700,
+  "height":300,
+  "mark": "area",
+  
+  "encoding": {
+    "x": {
+      "field": "year",
+      "axis":{"labelAngle":-45}
+    },
+    "y": {
+      "aggregate": "mean", 
+      "field": "suicidesPer100k",
+      "title": "Average Suicide rate"
+    },
+    "color": {
+      "field": "sex",
+      "scale": {"scheme": "blues"},
+      "legend":{
+        "direction": "horizontal",
+        "orient": "top",
+        "title": "Gender"
+      }
+    },
+    "tooltip":[
+      {"field":"sex", "title":"Gender"},
+      {"field":"mean_suicidesPer100k", "title":"Mean Suicide Rate"}
+    ]
+  },
+  "config": {
+    "background":"rgb(239,243,255)"
+  }
+}

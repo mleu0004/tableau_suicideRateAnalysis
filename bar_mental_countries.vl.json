@@ -1,0 +1,57 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 700,
+  "height": 300,
+  "data": {
+    "url": "https://raw.githubusercontent.com/mleu0004/3179-testrepo/main/survey.csv"
+  },
+  "transform": [
+    {
+      "aggregate": [{"op": "count", "field": "Country", "as": "count_mental"}],
+      "groupby": ["Country"]
+    },
+    {
+      "window": [{"op": "rank", "as": "rank"}],
+      "sort": [{"field": "count_mental", "order": "descending"}]
+    },
+    {"filter": "datum.rank <= 10"},
+    {
+      "joinaggregate": [
+        {"op": "count", "field": "Country", "as": "cnt_country"},
+        {"op": "sum", "field": "count_mental", "as": "sum_count_mental"}
+      ]
+    },
+    {"calculate": "datum.sum_count_mental/datum.cnt_country", "as": "avg"}
+  ],
+  "layer": [
+    {
+      "mark": "bar",
+      "encoding": {
+        "x": {"field": "count_mental", "type": "quantitative"},
+        "y": {
+          "field": "Country",
+          "type": "nominal",
+          "sort": {"field": "count_mental", "order": "descending"}
+        },
+        "color": {
+          "field": "count_mental",
+          "scale": {"scheme": "oranges"},
+          "legend": null
+        },
+        "tooltip": [
+          {"field": "Country", "type": "nominal"},
+          {"field": "count_mental", "type": "quantitative", "title": "Mental Victims"}
+        ]
+      }
+    },
+    {
+      "mark": {"type": "rule", "color": "black"},
+      "encoding": {
+        "x": {"aggregate": "mean", "field": "avg", "type": "quantitative", "title": "Mental Victims"}
+      }
+    }
+  ],
+  "config": {
+    "background":"rgb(239,243,255)"
+  }
+}

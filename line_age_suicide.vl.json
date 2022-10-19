@@ -1,0 +1,37 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 700,
+  "height": 300,
+  "title": "Suicide Rate for Different Age Group",
+  "data": {
+    "url": "suicide.csv"
+  },
+  "mark": {"type": "line", "point": true},
+  "transform": [{"calculate": "year(datum.year)", "as": "Year"}],
+  "encoding": {
+    "x": {
+      "field": "Year", 
+      "type": "nominal",
+      "axis":{"labelAngle":-45}},
+    "y": {
+      "aggregate": "mean",
+      "field": "suicidesPer100k",
+      "type": "quantitative",
+      "title": "Suicides Per 100k"
+    },
+    "color": {
+      "field": "age",
+      "legend":{
+        "direction": "horizontal",
+        "orient": "top",
+        "title": "Age"
+      }},
+    "tooltip": [
+      {"field": "Year", "type": "nominal"},
+      {"field": "mean_suicidesPer100k", "title": "mean of suicide rate", "format": "r"}
+    ]
+  },
+  "config": {
+    "background":"rgb(239,243,255)"
+  }
+}
